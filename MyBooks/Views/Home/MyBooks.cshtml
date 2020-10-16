@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "My Books";
+}
+
+
+@model  List<Book>
+
+<div>
+    @if (Model.Any())
+    {
+        <ul class="big-image-list">
+            @foreach (Book entity in Model)
+            {
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="@entity.Id">
+                        <img src="~/images/@entity.ImagePath" alt="" class="left" />
+                    </a>
+                    <h4>@entity.Name</h4>
+                    <p>@entity.Type</p>
+
+                    <a asp-controller="Home" asp-action="DeleteMyLibrary" asp-route-id="@entity.Id">Delete this book from my library</a>
+
+                </li>
+            }
+        </ul>
+    }
+</div>
+
