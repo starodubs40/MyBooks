@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBooks.Domain;
@@ -46,7 +47,7 @@ namespace MyBooks.Controllers
             return Redirect("/Home/MyBooks");
         }
 
-        public IActionResult MyBooks()
+        public async Task<IActionResult> MyBooks()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -54,7 +55,7 @@ namespace MyBooks.Controllers
 
             foreach (var lib in dataManager.MyLibraries.GetMyLibrary(userId))
             {
-                books.Add(dataManager.Books.GetBookById(lib.BookId.ToString()));
+                books.Add( await dataManager.Books.GetBookById(lib.BookId.ToString()));
             }
 
             return View(books);

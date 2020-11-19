@@ -37,6 +37,9 @@ namespace MyBooks
 
             services.AddDbContext<MyBooksContext>(x => x.UseSqlServer(Config.ConnectionString));
 
+            // добавление кэширования
+            services.AddMemoryCache();
+
             services.AddIdentity<IdentityUser, IdentityRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;

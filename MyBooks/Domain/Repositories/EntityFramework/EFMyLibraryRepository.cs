@@ -1,4 +1,5 @@
-﻿using MyBooks.Domain.Entities;
+﻿using Microsoft.Extensions.Caching.Memory;
+using MyBooks.Domain.Entities;
 using MyBooks.Domain.Repositories.Abstract;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,28 @@ namespace MyBooks.Domain.Repositories.EntityFramework
     public class EFMyLibraryRepository : IMyLibraryRepository
     {
         private readonly MyBooksContext context;
+        private IMemoryCache cache;
 
-        public EFMyLibraryRepository(MyBooksContext context)
+        public EFMyLibraryRepository(MyBooksContext context, IMemoryCache memoryCache)
         {
             this.context = context;
+            cache = memoryCache;
         }
 
-        public void AddBookToMyLibrary(string bookId , string userId)
+        public async Task AddBookToMyLibrary(string bookId , string userId)
         {
             MyLibrary item = new MyLibrary { UserId = userId, BookId = bookId };
+            //
             context.MyLibraries.Add(item);
-            context.SaveChanges();
+
+            int n = await context.SaveChangesAsync();
+            if (n > 0)
+            {
+                cache.Set(item.Id, item, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
         }
 
         public void DeleteMyLibrary(Guid id)

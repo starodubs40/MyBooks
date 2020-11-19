@@ -11,7 +11,10 @@ namespace MyBooks.Domain
     public class MyBooksContext : IdentityDbContext<IdentityUser>
     {
 
-        public MyBooksContext(DbContextOptions<MyBooksContext> options) : base(options) { }
+        public MyBooksContext(DbContextOptions<MyBooksContext> options) : base(options) 
+        {
+            Database.EnsureCreated();
+        }
 
         public DbSet<Book> Books { get; set; }
 

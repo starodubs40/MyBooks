@@ -1,6 +1,7 @@
 ﻿using MyBooks.Domain.Entities;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyBooks.Domain.Repositories.Abstract
 {
@@ -10,6 +11,6 @@ namespace MyBooks.Domain.Repositories.Abstract
        
         void DeleteMyLibrary(Guid id);
 
-        void AddBookToMyLibrary(string bookId , string userId);
+        Task AddBookToMyLibrary(string bookId , string userId);
     }
 }
